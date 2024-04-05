@@ -3,34 +3,38 @@ import { NextRequest } from "next/server";
 const jwt = require("jsonwebtoken");
 import { VerifyErrors, JwtPayload } from "jsonwebtoken";
 
-export default function middleware(req: NextRequest, res: NextResponse) {
+export default function middleware(req: NextRequest) {
   let token = req.cookies.get("token");
 
-  if (!token && (req.url.includes("login") || req.url.includes("register"))) {
-    return;
-  }
-
-  if (!token && (!req.url.includes("login") || !req.url.includes("register"))) {
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
-
-  if ((token && req.url.includes("login")) || req.url.includes("register")) {
-    jwt.verify(
+  if (token) {
+    let isValidToken = jwt.verify(
       token,
       process.env.JWT_SECRET,
       (err: VerifyErrors | null, decodedToken: JwtPayload | undefined) => {
         if(err) {
-            console.log("Error", err.message);
-            const response = NextResponse.next();
-            response.cookies.delete('token');
-            return response
+          return false;
         }
         else {
-            console.log(decodedToken);
-            return NextResponse.redirect(new URL("/", req.url));
+          return true;
         }
       }
     );
+
+    if(!isValidToken){
+      if(!req.url.includes('login') && !req.url.includes('register')){
+        const response = NextResponse.redirect(new URL('/login', req.url));
+        response.cookies.delete('token');
+        return response;
+      }
+      const response = NextResponse.next();
+      response.cookies.delete('token');
+      return response;
+    }
+  
+  } else {
+    if( !req.url.includes('login') && !req.url.includes('register')){
+      return NextResponse.redirect(new URL('/login', req.url))
+    }
   }
 }
 

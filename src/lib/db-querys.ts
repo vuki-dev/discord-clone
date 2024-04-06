@@ -8,7 +8,6 @@ const registerProfile = async (username: string, email: string, hashedPassword: 
           if (err) {
             rej(err.message)
           } else {
-            console.log("Data inserted into MySQL successfully");
             res(result);
           }
         });

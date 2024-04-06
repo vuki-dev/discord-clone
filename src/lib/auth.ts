@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 const jwtSecret = process.env.JWT_SECRET;
 
-const createToken = (profile_id: string) => {
+const createToken = (profile_id: string | unknown) => {
   if (!jwtSecret) {
     throw new Error("JWT secret is not defined");
   }

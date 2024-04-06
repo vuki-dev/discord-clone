@@ -1,17 +1,23 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-const jwt = require("jsonwebtoken");
+import jwt from 'jsonwebtoken';
 import { VerifyErrors, JwtPayload } from "jsonwebtoken";
 
 export default function middleware(req: NextRequest) {
-  let token = req.cookies.get("token");
+  let tokenCookie = req.cookies.get("token");
+  let jwtSecret = process.env.JWT_SECRET;
+  if (!jwtSecret) {
+    jwtSecret = "";
+  }
 
-  if (token) {
+  if (tokenCookie) {
     let isValidToken = jwt.verify(
-      token,
-      process.env.JWT_SECRET,
+      tokenCookie.value,
+      jwtSecret,
       (err: VerifyErrors | null, decodedToken: JwtPayload | undefined) => {
         if(err) {
+          console.log("token invalid");
+          console.log(err)
           return false;
         }
         else {

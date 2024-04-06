@@ -14,9 +14,9 @@ export async function POST(req: Request) {
 
     await registerProfile(username, email, hashedPassword);
     const profileId = await getProfileId(email);
-    console.log(profileId);
+    const token = createToken(profileId);
 
-    return new NextResponse("Registered successfully", { status: 200 });
+    return new NextResponse("Registered successfully", { status: 200, headers: { 'Set-Cookie': `token=${token}; Path=/; Expires=${24*60*60}`} });
   } catch (error) {
     console.log("[REGISTER_POST]", error);
     return new NextResponse("Internal Error", { status: 500 });

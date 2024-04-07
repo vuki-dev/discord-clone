@@ -14,7 +14,7 @@ export async function POST(req: Request) {
 
     await registerProfile(username, email, hashedPassword);
     const profileId = await getProfileId(email);
-    const token = createToken(profileId);
+    const token = await createToken(profileId);
 
     return new NextResponse("Registered successfully", { status: 200, headers: { 'Set-Cookie': `token=${token}; Path=/; Expires=${24*60*60}`} });
   } catch (error) {

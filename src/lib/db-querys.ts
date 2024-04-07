@@ -30,4 +30,21 @@ const getProfileId = async (email: string) => {
     return profileId;
 }
 
-export { registerProfile, getProfileId };
+const emailInUseCheck = async (email: string) => {
+    let query = `SELECT * FROM profile where email = ?`
+    const emailArr: [] = await new Promise((res, rej) => {
+        db.query(query, [email], (err, result) => {
+            if(err){
+                rej(err.message);
+            } else {
+                res(result);
+            }
+        })
+    } )
+
+    if(emailArr.length > 0){
+        throw new Error("Email already in use")
+    }
+}
+
+export { registerProfile, getProfileId, emailInUseCheck };

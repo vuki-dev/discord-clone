@@ -1,15 +1,37 @@
-import jwt from "jsonwebtoken";
+import { jwtVerify, JWTPayload, decodeJwt, SignJWT } from 'jose';
+import { nanoid } from "nanoid";
 
-const jwtSecret = process.env.JWT_SECRET;
+export function getJwtSecretKey() {
+	const secret = process.env.JWT_SECRET;
 
-const createToken = (profile_id: string | unknown) => {
-  if (!jwtSecret) {
-    throw new Error("JWT secret is not defined");
+	if (!secret) {
+		throw new Error('JWT Secret key is not set');
+	}
+
+	const enc: Uint8Array = new TextEncoder().encode(secret);
+	return enc;
+}
+
+const createToken = async (payload: any) => {
+  const token = await new SignJWT({payload})
+          .setProtectedHeader({alg: "HS256"})
+          .setJti(nanoid())
+          .setIssuedAt()
+          .setExpirationTime("1 day")
+          .sign(new TextEncoder().encode(getJwtSecretKey().toString()))
+
+  return token;
+}
+
+const verifyToken = async (token: string | any) => {
+  // if doesnt work change encoder to simple jwtSecret
+  try{
+    const verified = await jwtVerify(token, new TextEncoder().encode(getJwtSecretKey().toString()));
+    return true;
+  } catch (err) {
+    //throw new Error("Token is not valid");
+    return false;
   }
+}
 
-  const maxAge = 24 * 60 * 60;
-
-  return jwt.sign({ profile_id }, jwtSecret, { expiresIn: maxAge });
-};
-
-export { createToken };
+export { createToken, verifyToken };

@@ -3,7 +3,7 @@ import { registerFormSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,9 +17,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const RegisterPage = () => {
   const router = useRouter()
+  const [error, setError] = useState<any | undefined>();
+
 
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
@@ -36,9 +39,13 @@ const RegisterPage = () => {
       const res = await axios.post('/api/auth/register',values)
      // console.log(res.data);
       form.reset();
-      router.push("/login");
+      router.push("/");
     } catch (err){
-      console.log(err)
+      if(err instanceof AxiosError && err.response){
+        setError(err.response.data);
+        return;
+      }
+      setError(err);
     }
   };
 
@@ -97,6 +104,9 @@ const RegisterPage = () => {
             </FormItem>
           )}
         />
+        <FormMessage>
+          {error && error.length > 1 && error}
+        </FormMessage>
         <Button className="w-full" variant={"primary"} type="submit">Register</Button>
       </form>
     </Form>

@@ -3,7 +3,7 @@ import { loginFormSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,8 +16,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
+  const router = useRouter();
+  const [error, setError] = useState<any | undefined>();
+
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -27,7 +32,18 @@ const LoginPage = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
-    console.log(values)
+    try{ 
+      const res = await axios.post('/api/auth/login',values)
+      console.log(res.data);
+      form.reset();
+      router.push("/");
+    } catch (err){
+      if(err instanceof AxiosError && err.response){
+        setError(err.response.data);
+        return;
+      }
+      setError(err);
+    }
   };
 
   return (
@@ -59,6 +75,9 @@ const LoginPage = () => {
             </FormItem>
           )}
         />
+        <FormMessage>
+          {error && error.length > 1 && error}
+        </FormMessage>
         <Button className="w-full" variant={"primary"} type="submit">Login</Button>
       </form>
     </Form>

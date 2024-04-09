@@ -23,7 +23,6 @@ const RegisterPage = () => {
   const router = useRouter()
   const [error, setError] = useState<any | undefined>();
 
-
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {

@@ -1,25 +1,23 @@
 import Image from "next/image";
 import ThemeSwitch from "@/components/theme-switch";
 import UserProfileMenu from "@/components/user-profile/user-profile-menu";
-import { getProfileById } from "@/lib/db-querys";
-import { jwtVerify } from "jose";
-import { getJwtSecretKey } from "@/lib/auth";
+
 import { cookies } from "next/headers";
+import { getUserServerSide } from "@/lib/server-side-utils";
+import { memberOfServers } from "@/lib/db-querys";
+import { redirect } from "next/navigation";
+import InitialModal from "@/components/modals/initial-modal";
+import { ProfileType } from "@/lib/types";
 
-export default async function Home() { 
+export default async function SetupPage() { 
   const token = cookies().get("token")?.value;
-  const verifiedToken = await jwtVerify(token ? token : "", new TextEncoder().encode(getJwtSecretKey().toString()))
-  const profileId: string | unknown = verifiedToken.payload.payload;
-  const profile = await getProfileById(profileId);
-  console.log(profile)
+  const profile = await getUserServerSide(token) as ProfileType;
+  const servers = await memberOfServers(profile.id)
+  const server = servers[0];
 
-  return (
-    <div>
-      <div className="flex gap-2 p-2" >
-        <UserProfileMenu />
-        <ThemeSwitch />
-      </div>
-      <h1>Hello discord clone</h1>
-    </div>
-  );
+  if(server) {
+    return redirect(`/servers/${server.id}`);
+  }
+
+  return <InitialModal />;
 }

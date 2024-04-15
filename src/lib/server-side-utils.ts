@@ -1,11 +1,15 @@
 import { jwtVerify } from "jose"
 import { getJwtSecretKey } from "./auth"
 import { getProfileById } from "./db-querys"
+import { ProfileType } from "./types"
+import { cookies } from "next/headers"
 
-export async function getUserServerSide(token: string | undefined) {
+export const getUserServerSide: () => Promise<ProfileType> = async () => {
+    const token = cookies().get('token')?.value
+
     const verifiedToken = await jwtVerify(token ? token : "", new TextEncoder().encode(getJwtSecretKey().toString()))
-    const profileId: string | unknown = verifiedToken.payload.payload;
+    const profileId: string | unknown = verifiedToken.payload.payload as string;
     const profile = await getProfileById(profileId);
   
-    return profile
+    return profile as ProfileType;
   }

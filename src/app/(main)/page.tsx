@@ -3,10 +3,10 @@ import ThemeSwitch from "@/components/theme-switch";
 import UserProfileMenu from "@/components/user-profile/user-profile-menu";
 
 import { getUserServerSide } from "@/lib/server-side-utils";
-import { memberOfServers } from "@/lib/db-querys";
 import { redirect } from "next/navigation";
 import InitialModal from "@/components/modals/initial-modal";
 import { ProfileType } from "@/lib/types";
+import { memberOfServers } from "@/lib/db/db-querys";
 
 export default async function SetupPage() { 
   const profile = await getUserServerSide() as ProfileType;

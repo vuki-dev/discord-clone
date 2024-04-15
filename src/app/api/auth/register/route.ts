@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-import { registerProfile, getProfileId, emailInUseCheck } from "@/lib/db-querys";
+import { registerProfile, getProfileId, emailInUseCheck } from "@/lib/db/db-querys";
 import { createToken } from "@/lib/auth";
 import { registerFormSchema } from "@/lib/validation";
 

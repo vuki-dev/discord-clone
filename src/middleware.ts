@@ -5,6 +5,11 @@ import { verifyToken } from "./lib/auth";
 export default async function middleware(req: NextRequest) {
   let tokenCookie = req.cookies.get("token");
   let token = tokenCookie?.value;
+
+  if (req.url.includes('/api/uploadthing')) {
+    // Allow access to public API routes without token verification
+    return NextResponse.next();
+  }
   
   if(tokenCookie && token === undefined || token === ""){
     if( !req.url.includes('login') && !req.url.includes('register')){

@@ -1,14 +1,12 @@
 import { getUserServerSide } from "@/lib/server-side-utils";
 import { ProfileType } from "@/lib/types";
-import { cookies } from "next/headers";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
  
 const f = createUploadthing();
  
 const auth = async () => {
-    const token = cookies().get('token')?.value;
-    const { id } = await getUserServerSide(token);
+    const { id } = await getUserServerSide();
 
     if(!id) throw new Error("Unauthorized");
 

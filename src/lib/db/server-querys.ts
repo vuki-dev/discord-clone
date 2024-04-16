@@ -1,4 +1,5 @@
 import db from "./db";
+import { MemberRole, ServerType } from "../types";
 
 export const userCreateServer = async (
   id: string,
@@ -9,7 +10,7 @@ export const userCreateServer = async (
 ) => {
   const serverQuery = `INSERT INTO servers (id, user_id, name, image_url, invite_code) VALUES (?, ?, ?, ?, ?)`;
 
-  const server = await new Promise((res, rej) => {
+  const server: ServerType = await new Promise((res, rej) => {
     db.query(
       serverQuery,
       [id, userId, name, imageUrl, inviteCode],
@@ -33,5 +34,31 @@ export const userCreateServer = async (
     );
   });
 
-  console.log("server", server);
+  const serverId = server.id;
+
+  const channelQuery = "INSERT INTO channels (name, user_id, server_id) VALUES (?, ?, ?)"
+
+  const channel = await new Promise((res, rej) => {
+      db.query( channelQuery, ["general", userId, serverId], (err, result) => {
+        if(err){
+          rej(err)
+        } else {
+          res(result)
+        }
+      })
+  })
+  
+  const memberQuery = "INSERT INTO members (user_id, role, server_id) VALUES (?, ?, ?)"
+  const role: MemberRole = "ADMIN"
+
+  const member = await new Promise((res, rej) => {
+    db.query( memberQuery, [userId, role, serverId ], (err, result) => {
+      if(err){
+        rej(err)
+      } else {
+        res(result)
+      }
+    })
+})
+  
 };

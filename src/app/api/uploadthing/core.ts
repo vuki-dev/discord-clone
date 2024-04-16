@@ -1,5 +1,5 @@
 import { getUserServerSide } from "@/lib/server-side-utils";
-import { ProfileType } from "@/lib/types";
+import { UserType } from "@/lib/types";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
  

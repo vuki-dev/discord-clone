@@ -1,8 +1,9 @@
 import db from "./db";
 import bcrypt from "bcrypt";
 
-export const registerProfile = async (username: string, email: string, hashedPassword: string) => {
-    const query = `INSERT INTO profile (name, email, password) VALUES (?, ?, ?)`;
+export const registerUser = async (username: string, email: string, hashedPassword: string) => {
+    const query = `INSERT INTO users (name, email, password) VALUES (?, ?, ?)`;
+    console.log("ide")
 
     await new Promise ((res, rej) => {
         db.query(query, [username, email, hashedPassword], (err, result) => {
@@ -15,10 +16,10 @@ export const registerProfile = async (username: string, email: string, hashedPas
     });
 }
 
-export const getProfileId = async (email: string) => {
-    let selectQuery = `SELECT id FROM profile WHERE email = ?`;
+export const getUserId = async (email: string) => {
+    let selectQuery = `SELECT id FROM users WHERE email = ?`;
 
-    const profileId = await new Promise((res, rej) => {
+    const userId = await new Promise((res, rej) => {
         db.query(selectQuery, [email], (err, result) => {
             if (err) {
                 rej(err.message)
@@ -28,14 +29,14 @@ export const getProfileId = async (email: string) => {
         })
     })
 
-    return profileId;
+    return userId;
 }
 
-export const getProfileById = async (profileId:string | unknown) => {
-    let query = `SELECT id, name, email, created_at FROM profile WHERE id = ?`;
+export const getUserById = async (userId:string | unknown) => {
+    let query = `SELECT id, name, email, created_at FROM users WHERE id = ?`;
 
-    const profile = await new Promise((res, rej) => {
-        db.query(query, [profileId], (err, result) => {
+    const user = await new Promise((res, rej) => {
+        db.query(query, [userId], (err, result) => {
             if (err) {
                 rej(err.message)
             } else {
@@ -44,11 +45,11 @@ export const getProfileById = async (profileId:string | unknown) => {
         })
     })
 
-    return profile;    
+    return user;    
 }
 
 export const emailInUseCheck = async (email: string) => {
-    let query = `SELECT * FROM profile where email = ?`
+    let query = `SELECT * FROM users where email = ?`
     const emailArr: [] = await new Promise((res, rej) => {
         db.query(query, [email], (err, result) => {
             if(err){
@@ -65,7 +66,7 @@ export const emailInUseCheck = async (email: string) => {
 }
 
 export const userLogin = async (email:string, password:string) =>{ 
-    let query = `SELECT * FROM profile WHERE email = ?`;
+    let query = `SELECT * FROM users WHERE email = ?`;
     const rows: any[] = await new Promise((res, rej) => {
         db.query(query, [email], (err, result) => {
             if(err){
@@ -91,15 +92,15 @@ export const userLogin = async (email:string, password:string) =>{
     }
 }
 
-export const memberOfServers = async (profileId:string | unknown) => {
-    // this query gets all servers where an profile is member of;
-    const query = `SELECT server.*, member.*
-    FROM server
-    JOIN member ON server.profile_id = member.profile_id
-    WHERE server.profile_id = ?`
+export const memberOfServers = async (userId:string | unknown) => {
+    // this query gets all servers where an user is member of;
+    const query = `SELECT servers.*, members.*
+    FROM servers
+    JOIN members ON servers.user_id = members.user_id
+    WHERE servers.user_id = ?`
 
     const rows:any[] = await new Promise((res, rej) => {
-        db.query(query, [profileId] ,(err, result) => {
+        db.query(query, [userId] ,(err, result) => {
             if(err){
                 rej(err);
             } else {

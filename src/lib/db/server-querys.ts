@@ -36,29 +36,52 @@ export const userCreateServer = async (
 
   const serverId = server.id;
 
-  const channelQuery = "INSERT INTO channels (name, user_id, server_id) VALUES (?, ?, ?)"
+  const channelQuery =
+    "INSERT INTO channels (name, user_id, server_id) VALUES (?, ?, ?)";
 
   const channel = await new Promise((res, rej) => {
-      db.query( channelQuery, ["general", userId, serverId], (err, result) => {
-        if(err){
-          rej(err)
-        } else {
-          res(result)
-        }
-      })
-  })
-  
-  const memberQuery = "INSERT INTO members (user_id, role, server_id) VALUES (?, ?, ?)"
-  const role: MemberRole = "ADMIN"
+    db.query(channelQuery, ["general", userId, serverId], (err, result) => {
+      if (err) {
+        rej(err);
+      } else {
+        res(result);
+      }
+    });
+  });
+
+  const memberQuery =
+    "INSERT INTO members (user_id, role, server_id) VALUES (?, ?, ?)";
+  const role: MemberRole = "ADMIN";
 
   const member = await new Promise((res, rej) => {
-    db.query( memberQuery, [userId, role, serverId ], (err, result) => {
-      if(err){
-        rej(err)
+    db.query(memberQuery, [userId, role, serverId], (err, result) => {
+      if (err) {
+        rej(err);
       } else {
-        res(result)
+        res(result);
       }
-    })
-})
+    });
+  });
   
+  return server;
 };
+
+export const memberOfServers = async (userId:string | unknown) => {
+  // this query gets all servers where an user is member of;
+  const query = `SELECT servers.*, members.*
+  FROM servers
+  JOIN members ON servers.user_id = members.user_id
+  WHERE servers.user_id = ?`
+
+  const rows:any[] = await new Promise((res, rej) => {
+      db.query(query, [userId] ,(err, result) => {
+          if(err){
+              rej(err);
+          } else {
+              res(result);
+          }
+      })
+  })
+
+  return rows;
+}

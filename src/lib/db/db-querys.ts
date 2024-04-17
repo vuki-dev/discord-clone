@@ -91,23 +91,3 @@ export const userLogin = async (email:string, password:string) =>{
         return user;
     }
 }
-
-export const memberOfServers = async (userId:string | unknown) => {
-    // this query gets all servers where an user is member of;
-    const query = `SELECT servers.*, members.*
-    FROM servers
-    JOIN members ON servers.user_id = members.user_id
-    WHERE servers.user_id = ?`
-
-    const rows:any[] = await new Promise((res, rej) => {
-        db.query(query, [userId] ,(err, result) => {
-            if(err){
-                rej(err);
-            } else {
-                res(result);
-            }
-        })
-    })
-
-    return rows;
-}

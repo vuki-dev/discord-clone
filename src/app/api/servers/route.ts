@@ -16,8 +16,9 @@ export async function POST(req: Request){
         const id = uuidv4();
         const inviteCode = uuidv4();
 
-        await userCreateServer(id, user.id, name, imageUrl, inviteCode);
+        const server = await userCreateServer(id, user.id, name, imageUrl, inviteCode);
 
+        return NextResponse.json(server)
     } catch (err) {
         console.log("[SERVERS_POST]", err);
         return new NextResponse("Internal Error", {status: 500})

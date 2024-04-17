@@ -68,10 +68,10 @@ export const userCreateServer = async (
 
 export const memberOfServers = async (userId:string | unknown) => {
   // this query gets all servers where an user is member of;
-  const query = `SELECT servers.*, members.*
+  const query = `SELECT servers.*, members.role
   FROM servers
   JOIN members ON servers.user_id = members.user_id
-  WHERE servers.user_id = ?`
+  WHERE servers.user_id = ? AND members.server_id = servers.id`
 
   const rows:any[] = await new Promise((res, rej) => {
       db.query(query, [userId] ,(err, result) => {

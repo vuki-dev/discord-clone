@@ -36,7 +36,8 @@ const LoginPage = () => {
       const res = await axios.post('/api/auth/login',values)
       console.log(res.data);
       form.reset();
-      router.push("/");
+      router.refresh()
+      window.location.reload();
     } catch (err){
       if(err instanceof AxiosError && err.response){
         setError(err.response.data);

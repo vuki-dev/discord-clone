@@ -1,5 +1,5 @@
 import db from "./db";
-import { MemberRole, ServerType } from "../types";
+import { ChannelType, MemberType, MemberRole, ServerType } from "@/lib/types";
 
 export const userCreateServer = async (
   id: string,
@@ -62,26 +62,84 @@ export const userCreateServer = async (
       }
     });
   });
-  
+
   return server;
 };
 
-export const memberOfServers = async (userId:string | unknown) => {
+export const memberOfServers = async (userId: string | unknown) => {
   // this query gets all servers where an user is member of;
   const query = `SELECT servers.*, members.role
   FROM servers
   JOIN members ON servers.user_id = members.user_id
-  WHERE servers.user_id = ? AND members.server_id = servers.id`
+  WHERE servers.user_id = ? AND members.server_id = servers.id`;
 
-  const rows:any[] = await new Promise((res, rej) => {
-      db.query(query, [userId] ,(err, result) => {
-          if(err){
-              rej(err);
-          } else {
-              res(result);
-          }
-      })
-  })
+  const rows: any[] = await new Promise((res, rej) => {
+    db.query(query, [userId], (err, result) => {
+      if (err) {
+        rej(err);
+      } else {
+        res(result);
+      }
+    });
+  });
 
   return rows;
-}
+};
+
+export const getServer = async (
+  serverId: string | unknown,
+  userId: string | unknown
+) => {
+  const query = `SELECT servers.*
+  FROM servers
+  JOIN members ON servers.user_id = members.user_id
+  WHERE servers.id = ? AND servers.user_id = ? AND members.server_id = servers.id`;
+
+  const rows: any[] = await new Promise((res, rej) => {
+    db.query(query, [serverId, userId], (err, result) => {
+      if (err) {
+        rej(err);
+      } else {
+        res(result);
+      }
+    });
+  });
+
+  const server = rows[0];
+  return server;
+};
+
+export const getServerChannels = async (serverId: string | unknown) => {
+  const query = `SELECT * FROM channels WHERE server_id = ? ORDER BY created_at ASC`;
+
+  const serverChannels: ChannelType[] = await new Promise((res, rej) => {
+    db.query(query, [serverId], (err, result) => {
+      if (err) {
+        rej(err);
+      } else {
+        res(result);
+      }
+    });
+  });
+
+  return serverChannels;
+};
+
+export const getServerMembers = async (serverId: string | unknown) => {
+  const query = `SELECT members.*, users.name, users.email, users.image_url
+    FROM members
+    JOIN users ON members.user_id = users.id
+    WHERE members.server_id = ? ORDER BY role ASC`;
+
+  const serverMembers: MemberType[] = await new Promise((res, rej) => {
+    db.query(query, [serverId], (err, result) => {
+      if (err) {
+        rej(err);
+      } else {
+        res(result);
+      }
+    });
+  });
+
+  return serverMembers;
+};

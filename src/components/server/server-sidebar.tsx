@@ -7,7 +7,8 @@ import {
   getServerMembers,
 } from "@/lib/db/server-querys";
 
-import { ServerType } from "@/lib/types";
+import { MemberRole, ServerType } from "@/lib/types";
+import ServerHeader from "./server-header";
 
 const ServerSidebar = async ({ serverId }: { serverId: string }) => {
   const user = await getUserServerSide();
@@ -24,7 +25,6 @@ const ServerSidebar = async ({ serverId }: { serverId: string }) => {
 
   server.channels = await getServerChannels(serverId);
   server.members = await getServerMembers(serverId);
-  console.log(server);
 
   const textChannels = server?.channels.filter(
     (channel) =>
@@ -42,11 +42,15 @@ const ServerSidebar = async ({ serverId }: { serverId: string }) => {
     (member) => member.user_id !== user.id
   );
 
-  const role = server.members.find((member) => member.user_id === user.id)?.role
+  const role = server.members.find(
+    (member) => member.user_id === user.id
+  )?.role;
 
-  return <div className="flex flex-col h-full text-primary w-full dark:bg-[#2b2d31] bg-[#f2f3f5]">
-    Server Sidebar Component
-  </div>;
+  return (
+    <div className="flex flex-col h-full text-primary w-full dark:bg-[#2b2d31] bg-[#f2f3f5]">
+      <ServerHeader server={server} role={role} />
+    </div>
+  );
 };
 
 export default ServerSidebar;

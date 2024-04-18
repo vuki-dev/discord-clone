@@ -100,7 +100,7 @@ export const getServer = async (
       if (err) {
         rej(err);
       } else {
-        res(result);
+        res(JSON.parse(JSON.stringify(result)));
       }
     });
   });
@@ -117,11 +117,11 @@ export const getServerChannels = async (serverId: string | unknown) => {
       if (err) {
         rej(err);
       } else {
-        res(result);
+        res(JSON.parse(JSON.stringify(result)));
       }
     });
   });
-
+  
   return serverChannels;
 };
 
@@ -136,7 +136,7 @@ export const getServerMembers = async (serverId: string | unknown) => {
       if (err) {
         rej(err);
       } else {
-        res(result);
+        res(JSON.parse(JSON.stringify(result)));
       }
     });
   });

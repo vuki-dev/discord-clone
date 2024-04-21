@@ -1,3 +1,4 @@
+import { getExistingServer } from "@/lib/db/server-querys";
 import { getUserServerSide } from "@/lib/server-side-utils";
 import { redirect } from "next/navigation";
 
@@ -19,7 +20,13 @@ const InviteCodePage = async ({params}: InviteCodePageProps) => {
         redirect('/')
     }
 
-    return <div>Invite Code page!</div>
+    const existingServer = await getExistingServer(params.inviteCode, user.id);
+
+    if(existingServer) {
+        return redirect(`/servers/${existingServer.id}`)
+    }
+
+    return null;
 }
 
 export default InviteCodePage;

@@ -1,5 +1,6 @@
 import db from "./db";
 import { ChannelType, MemberType, MemberRole, ServerType } from "@/lib/types";
+import {v4 as uuidv4 } from "uuid";
 
 export const userCreateServer = async (
   id: string,
@@ -143,3 +144,24 @@ export const getServerMembers = async (serverId: string | unknown) => {
 
   return serverMembers;
 };
+
+export const updateInviteCode = async (userId:string, serverId:string) => {
+  const query = `UPDATE servers
+  SET invite_code = ?
+  WHERE user_id = ? AND id = ?;
+  `
+
+  const newCode = uuidv4();
+  
+  const server = await new Promise((res, rej) => {
+    db.query(query, [newCode, userId, serverId], (err, result) => {
+      if (err) {
+        rej(err);
+      } else {
+        res(getServer(serverId, userId));
+      }
+    });
+  });
+
+  return server
+}

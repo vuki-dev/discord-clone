@@ -1,4 +1,4 @@
-import { getExistingServer } from "@/lib/db/server-querys";
+import { getExistingServer, joinOnInvite } from "@/lib/db/server-querys";
 import { getUserServerSide } from "@/lib/server-side-utils";
 import { redirect } from "next/navigation";
 
@@ -16,7 +16,7 @@ const InviteCodePage = async ({params}: InviteCodePageProps) => {
         redirect('/login');
     }
 
-    if(!params){
+    if(!params.inviteCode){
         redirect('/')
     }
 
@@ -24,6 +24,12 @@ const InviteCodePage = async ({params}: InviteCodePageProps) => {
 
     if(existingServer) {
         return redirect(`/servers/${existingServer.id}`)
+    }
+
+    const server = await joinOnInvite(params.inviteCode, user.id);
+
+    if(server) {
+        return redirect(`/servers/${server.id}`)
     }
 
     return null;

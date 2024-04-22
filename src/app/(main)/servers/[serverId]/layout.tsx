@@ -11,7 +11,6 @@ const ServerIdLayout = async ({
   params: { serverId: string };
 }) => {
   const user = await getUserServerSide();
-  console.log(user.id)
 
   if (!user) {
     return redirect("/login");

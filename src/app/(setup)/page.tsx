@@ -10,7 +10,7 @@ export default async function SetupPage() {
   const server = servers[0];
 
   if(server) {
-    return redirect(`/servers/${server.id}`);
+    return redirect(`/servers/${server.server_id}`);
   }
 
   return <InitialModal />;

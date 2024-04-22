@@ -34,7 +34,6 @@ const LoginPage = () => {
   const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
     try{ 
       const res = await axios.post('/api/auth/login',values)
-      console.log(res.data);
       form.reset();
       router.refresh()
       window.location.reload();

@@ -69,10 +69,11 @@ export const userCreateServer = async (
 
 export const memberOfServers = async (userId: string | unknown) => {
   // this query gets all servers where an user is member of;
-  const query = `SELECT servers.*, members.role
-  FROM servers
-  JOIN members ON servers.user_id = members.user_id
-  WHERE servers.user_id = ? AND members.server_id = servers.id`;
+  const query = `SELECT members.*, servers.name, servers.image_url, servers.invite_code
+  FROM members
+  JOIN servers ON members.server_id = servers.id
+  WHERE members.user_id = ?`;
+
 
   const rows: any[] = await new Promise((res, rej) => {
     db.query(query, [userId], (err, result) => {
@@ -93,8 +94,8 @@ export const getServer = async (
 ) => {
   const query = `SELECT servers.*
   FROM servers
-  JOIN members ON servers.user_id = members.user_id
-  WHERE servers.id = ? AND servers.user_id = ? AND members.server_id = servers.id`;
+  JOIN members ON servers.id = members.server_id
+  WHERE servers.id = ? AND members.user_id = ?`;
 
   const rows: any[] = await new Promise((res, rej) => {
     db.query(query, [serverId, userId], (err, result) => {
@@ -148,8 +149,7 @@ export const getServerMembers = async (serverId: string | unknown) => {
 export const updateInviteCode = async (userId: string, serverId: string) => {
   const query = `UPDATE servers
   SET invite_code = ?
-  WHERE user_id = ? AND id = ?;
-  `;
+  WHERE user_id = ? AND id = ?`;
 
   const newCode = uuidv4();
 
@@ -185,6 +185,30 @@ export const getExistingServer = async (inviteCode: string, userId: string) => {
   return rows[0];
 };
 
-export const joinOnInvite = async () => {
+export const joinOnInvite = async (inviteCode: string, userId: string) => {
+  const getServerByInvCodeQuery = `SELECT * FROM servers
+  WHERE invite_code = ?`
+  
+  const joinServerQuery = `INSERT INTO members (user_id, server_id) VALUES (?, ?)`
 
+  const rows: ServerType = await new Promise((res, rej) => {
+    let server: ServerType;
+
+    db.query(getServerByInvCodeQuery, [inviteCode], (err, result) => {
+      if(err) {
+        rej(err)
+      } else {
+        server = result[0];
+        db.query(joinServerQuery, [userId, server.id], (err,result) => {
+          if(err){
+            rej(err)
+          } else {
+            res(server);
+          }
+        })
+      }
+    })
+  })
+
+  return rows;
 }

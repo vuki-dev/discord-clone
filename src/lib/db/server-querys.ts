@@ -212,3 +212,25 @@ export const joinOnInvite = async (inviteCode: string, userId: string) => {
 
   return rows;
 }
+
+export const editServer = async (serverId: string, userId: string, values: {name: string, imageUrl: string}) => {
+  const {name, imageUrl} = values;
+
+  const query = `UPDATE servers
+  SET name = ?, image_url = ?
+  WHERE id = ? AND user_id = ?;`
+
+  const server = await new Promise((res,rej)=>{
+    db.query(query, [name, imageUrl, serverId, userId],async (err,result)=>{
+      if(err){
+        rej(err)
+      } else {
+        const server = await getServer(serverId, userId);
+        res(server);
+      }
+    })
+  })
+
+
+  return server;
+}

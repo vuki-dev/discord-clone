@@ -1,5 +1,5 @@
 import ServerSidebar from "@/components/server/server-sidebar";
-import { getServer } from "@/lib/db/server-querys";
+import { getServer } from "@/lib/db/server-queries";
 import { getUserServerSide } from "@/lib/server-side-utils";
 import { redirect } from "next/navigation";
 

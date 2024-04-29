@@ -1,4 +1,4 @@
-import { memberOfServers } from "@/lib/db/server-querys";
+import { memberOfServers } from "@/lib/db/server-queries";
 import { getUserServerSide } from "@/lib/server-side-utils";
 import { redirect } from "next/navigation";
 import { Separator } from "@/components/ui/separator";

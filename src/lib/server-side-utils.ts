@@ -1,6 +1,6 @@
 import { jwtVerify } from "jose"
 import { getJwtSecretKey } from "./auth"
-import { getUserById } from "./db/db-querys"
+import { getUserById } from "./db/db-queries"
 import { UserType } from "./types"
 import { cookies } from "next/headers"
 

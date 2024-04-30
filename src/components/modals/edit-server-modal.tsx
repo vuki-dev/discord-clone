@@ -52,7 +52,6 @@ const formSchema = z.object({
     if( server ){
       form.setValue("name", server.name);
       form.setValue("imageUrl", server.image_url);
-      console.log("set")
     }
   }, [server, form])
 

@@ -1,7 +1,11 @@
 'use client'
 
-const UserAvatar = () => {
-  return (
+import { UserType } from "@/lib/types";
+
+const UserAvatar = ( {user}: {user?: UserType}) => {
+
+  if (!user){
+    return (
     <div tabIndex={-1} className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600 focus:outline-none">
       <svg
         className="absolute w-12 h-12 text-gray-400 -left-1"
@@ -17,6 +21,9 @@ const UserAvatar = () => {
       </svg>
     </div>
   );
+  } 
+
+  return null;
 };
 
 export default UserAvatar;

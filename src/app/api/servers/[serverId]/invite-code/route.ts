@@ -1,4 +1,4 @@
-import { updateInviteCode } from "@/lib/db/server-querys";
+import { updateInviteCode } from "@/lib/db/server-queries";
 import { getUserServerSide } from "@/lib/server-side-utils"
 import { NextResponse } from "next/server"
 

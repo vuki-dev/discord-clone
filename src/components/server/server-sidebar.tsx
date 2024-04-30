@@ -5,7 +5,7 @@ import {
   getServer,
   getServerChannels,
   getServerMembers,
-} from "@/lib/db/server-querys";
+} from "@/lib/db/server-queries";
 
 import { MemberRole, ServerType } from "@/lib/types";
 import ServerHeader from "./server-header";

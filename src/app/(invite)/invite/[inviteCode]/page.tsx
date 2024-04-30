@@ -1,4 +1,4 @@
-import { getExistingServer, joinOnInvite } from "@/lib/db/server-querys";
+import { getExistingServer, joinOnInvite } from "@/lib/db/server-queries";
 import { getUserServerSide } from "@/lib/server-side-utils";
 import { redirect } from "next/navigation";
 

@@ -73,7 +73,7 @@ const roleIconMap = {
       const url = qs.stringifyUrl({
         url: `/api/members/${memberId}`,
         query: {
-          server: server?.id,
+          serverId: server?.id,
           memberId
         }
       })
@@ -138,7 +138,7 @@ const roleIconMap = {
                                   member.role === "GUEST" && (<Check className="h-4 w-4 ml-auto" />)
                                 }
                               </DropdownMenuItem>
-                              <DropdownMenuItem>
+                              <DropdownMenuItem onClick={()=>{onRoleChange(member.id, "MODERATOR")}}>
                                 <ShieldCheck className="h-4 w-4 mr-2" />
                                 MODERATOR
                                 {

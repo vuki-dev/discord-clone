@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import InitialModal from "@/components/modals/initial-modal";
 import { UserType } from "@/lib/types";
-import { memberOfServers } from "@/lib/db/server-querys";
+import { memberOfServers } from "@/lib/db/server-queries";
 import { getUserServerSide } from "@/lib/server-side-utils";
 
 export default async function SetupPage() { 

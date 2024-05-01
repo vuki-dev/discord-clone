@@ -1,5 +1,5 @@
 import { createToken } from "@/lib/auth";
-import { userLogin } from "@/lib/db/db-querys";
+import { userLogin } from "@/lib/db/db-queries";
 import { loginFormSchema } from "@/lib/validation";
 import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";

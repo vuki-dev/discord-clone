@@ -18,3 +18,20 @@ export const updateMemberRole = async (role:string, serverId: string, userId: st
 
     return server;
 }
+
+export const kickMember = async (memberId: string, serverId: string, userId: string) => {
+  const query = `DELETE members
+  FROM members
+  JOIN servers ON servers.id = members.server_id
+  WHERE members.id = ? AND servers.id = ? AND servers.user_id = ?`
+
+  return await new Promise((res, rej) => {
+      db.query(query, [memberId, serverId, userId], (err, result) => {
+        if (err) {
+          rej(err);
+        } else {
+          res(result);
+        }
+      });
+  }); 
+}

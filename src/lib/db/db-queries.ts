@@ -2,12 +2,14 @@ import db from "./db";
 import bcrypt from "bcrypt";
 
 export const registerUser = async (username: string, email: string, hashedPassword: string) => {
+    console.log(username, email, hashedPassword);
     const query = `INSERT INTO users (name, email, password) VALUES (?, ?, ?)`;
     console.log("ide")
 
     await new Promise ((res, rej) => {
         db.query(query, [username, email, hashedPassword], (err, result) => {
           if (err) {
+              console.log(err.message)
             rej(err.message)
           } else {
             res(result);

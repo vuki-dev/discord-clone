@@ -52,7 +52,7 @@ const roleIconMap = {
       const url = qs.stringifyUrl({
         url: `/api/members/${memberId}`,
         query: {
-          server: server?.id,
+          serverId: server?.id,
         }
       })
 

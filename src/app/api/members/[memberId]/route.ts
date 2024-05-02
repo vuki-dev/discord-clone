@@ -1,4 +1,4 @@
-import { updateMemberRole } from "@/lib/db/member-queries";
+import { kickMember, updateMemberRole } from "@/lib/db/member-queries";
 import { getServer } from "@/lib/db/server-queries";
 import { getServerFull, getUserServerSide } from "@/lib/server-side-utils";
 import { NextResponse } from "next/server";
@@ -52,10 +52,10 @@ export async function DELETE (req: Request, {params}: {params: {memberId: string
             return new NextResponse("Member id missing", {status: 400});
         }
 
-        // const server = await kickMember();
+        await kickMember(params.memberId, serverId, user.id);
+        const server = await getServerFull(serverId, user.id);
 
-        // dont forget to return json response with data
-
+        return NextResponse.json(server);
     } catch (err) {
         console.log("MEMBER_ID_DELETE", err);
         return new NextResponse("Internal Error", {status: 500})

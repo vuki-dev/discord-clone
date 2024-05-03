@@ -19,6 +19,8 @@ export const getServerFull: (serverId: string, userId: string) => Promise<Server
     const server = await getServer(serverId, userId);
     server.members = await getServerMembers(serverId);
     server.channels = await getServerChannels(serverId);
+    // console.log(server.members)
+    // console.log(server.channels)
 
     return server as ServerType;
 }

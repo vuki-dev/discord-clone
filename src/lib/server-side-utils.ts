@@ -17,10 +17,8 @@ export const getUserServerSide: () => Promise<UserType> = async () => {
 
 export const getServerFull: (serverId: string, userId: string) => Promise<ServerType> = async (serverId, userId) => {
     const server = await getServer(serverId, userId);
-    const members = await getServerMembers(serverId);
-    const channels = await getServerChannels(serverId);
-    server.members = members ? members : [];
-    server.channels = channels ? channels : [];
+    server.members = await getServerMembers(serverId);
+    server.channels = await getServerChannels(serverId);
     // console.log(server.members)
     // console.log(server.channels)
 

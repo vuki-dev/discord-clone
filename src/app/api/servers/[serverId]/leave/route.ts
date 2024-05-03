@@ -15,9 +15,8 @@ export async function PATCH(req: Request, {params}:{params: {serverId: string}})
         }
 
         await leaveServer(params.serverId, user.id);
-        const server = await getServerFull(params.serverId, user.id);
 
-        return NextResponse.json(server);
+        return new NextResponse("Success", {status: 200})
     } catch (err) {
         console.log("[SERVER_ID_LEAVE]", err)
         return new NextResponse("Internal Error", {status: 500})

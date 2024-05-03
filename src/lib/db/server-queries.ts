@@ -251,3 +251,19 @@ export const leaveServer = async (serverId: string, userId: string) => {
     })
   })
 }
+
+export const deleteServer = async (serverId: string, userId: string) => {
+  const query = `
+  DELETE FROM servers
+  WHERE servers.id = ? AND servers.user_id = ?`
+
+  return await new Promise((res, rej) => {
+    db.query(query, [serverId, userId], (err, result)=>{
+      if(err){
+        rej(err)
+      } else {
+        res(result);
+      }
+    })
+  })
+}

@@ -41,4 +41,8 @@ export interface ChannelType {
 
 export type MemberRole = "ADMIN" | "MODERATOR" | "GUEST";
 
-export type ChannelInteractionType = "AUDIO" | "VIDEO" | "TEXT";
+export enum ChannelInteractionType {
+  AUDIO = "AUDIO",
+  TEXT = "TEXT",
+  VIDEO = "VIDEO"
+}

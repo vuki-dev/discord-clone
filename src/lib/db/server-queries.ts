@@ -234,3 +234,20 @@ export const editServer = async (serverId: string, userId: string, values: {name
 
   return server;
 }
+
+export const leaveServer = async (serverId: string, userId: string) => {
+  const query = `
+  DELETE members FROM members
+  JOIN servers ON servers.id = members.server_id
+  WHERE members.server_id = ? AND members.user_id = ? AND servers.user_id <> ?`
+
+  return await new Promise((res,rej) => {
+    db.query(query, [serverId, userId, userId], (err, result)=>{
+      if(err){
+        rej(err)
+      } else {
+        res(result);
+      }
+    })
+  })
+}

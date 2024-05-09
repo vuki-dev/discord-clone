@@ -11,7 +11,10 @@ import { MemberRole, ServerType, ChannelInteractionType } from "@/lib/types";
 import ServerHeader from "./server-header";
 import ServerSearch from "./server-search";
 
+import { ScrollArea } from "@/components/ui/scroll-area";
+
 import { Hash, Mic, ShieldAlert, ShieldCheck, Video } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 const iconMap = {
   [ChannelInteractionType.TEXT]: <Hash className="mr-2 h-4 w-4" />,
@@ -65,47 +68,52 @@ const ServerSidebar = async ({ serverId }: { serverId: string }) => {
   return (
     <div className="flex flex-col h-full text-primary w-full dark:bg-[#2b2d31] bg-[#f2f3f5]">
       <ServerHeader server={server} role={role} />
-      <div className="mt-2">
-        <ServerSearch data={[
-            {
-              label: "Text Channels",
-              type: "channel",
-              data: textChannels.map((channel) => ({
-                id: channel.id,
-                name: channel.name,
-                icon: iconMap[channel.channel_type]
-              }))
-            },
-            {
-              label: "Voice Channels",
-              type: "channel",
-              data: audioChannels.map((channel) => ({
-                id: channel.id,
-                name: channel.name,
-                icon: iconMap[channel.channel_type]
-              }))
-            },
-            {
-              label: "Video Channels",
-              type: "channel",
-              data: videoChannels.map((channel) => ({
-                id: channel.id,
-                name: channel.name,
-                icon: iconMap[channel.channel_type]
-              }))
-            },
-            {
-              label: "Members",
-              type: "member",
-              data: members?.map((member) => ({
-                id: member.id,
-                name: member.name,
-                icon: roleIconMap[member.role]
-              }))
-            }
-          ]} />
-      </div>
-    </div>
+        <ScrollArea className="flex-1 px-3">
+          <div className="mt-2">
+            <ServerSearch data={[
+                {
+                  label: "Text Channels",
+                  type: "channel",
+                  data: textChannels.map((channel) => ({
+                    id: channel.id,
+                    name: channel.name,
+                    icon: iconMap[channel.channel_type]
+                  }))
+                },
+                {
+                  label: "Voice Channels",
+                  type: "channel",
+                  data: audioChannels.map((channel) => ({
+                    id: channel.id,
+                    name: channel.name,
+                    icon: iconMap[channel.channel_type]
+                  }))
+                },
+                {
+                  label: "Video Channels",
+                  type: "channel",
+                  data: videoChannels.map((channel) => ({
+                    id: channel.id,
+                    name: channel.name,
+                    icon: iconMap[channel.channel_type]
+                  }))
+                },
+                {
+                  label: "Members",
+                  type: "member",
+                  data: members?.map((member) => ({
+                    id: member.id,
+                    name: member.name,
+                    icon: roleIconMap[member.role]
+                  }))
+                }
+              ]} />
+
+          </div>
+          <Separator className="bg-zinc-200 dark:bg-zinc-700 rounded-md my-2"/>
+
+        </ScrollArea>
+    </div> 
   );
 };
 

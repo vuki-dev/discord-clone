@@ -32,14 +32,18 @@ export interface MemberType {
 export interface ChannelType {
   id: string;
   name: string;
-  channel_type: ChannelInteractionType | null;
+  channel_type: ChannelInteractionType;
   user_id: string;
   server_id: string;
   created_at: Date;
   updated_at: Date;
 }
 
-export type MemberRole = "ADMIN" | "MODERATOR" | "GUEST";
+export enum MemberRole {
+  ADMIN = "ADMIN",
+  MODERATOR = "MODERATOR",
+  GUEST = "GUEST"
+}
 
 export enum ChannelInteractionType {
   AUDIO = "AUDIO",

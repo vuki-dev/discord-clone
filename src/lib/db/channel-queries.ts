@@ -1,3 +1,4 @@
+import { ChannelInteractionType } from "../types";
 import db from "./db";
 
 export const createChannel = async (values: {name: string, type: string},serverId: string, userId: string) => {
@@ -44,4 +45,23 @@ export const deleteChannel = async (channelId: string, serverId: string, userId:
       }
     })
   })
+}
+
+export const editChannel = async (channelId: string, serverId: string, userId: string, {name, type}: {name: string, type: ChannelInteractionType}) => {
+    const query = `
+    UPDATE channels
+    JOIN servers on servers.id = channels.server_id
+    JOIN members on members.server_id = channels.server_id
+    SET channels.name = ?, channels.channel_type = ?
+    WHERE channels.id = ? AND servers.id = ? AND members.user_id = ? AND members.role IN ('ADMIN', 'MODERATOR') AND channels.name <> 'general'`
+  
+    return await new Promise((res, rej) => {
+      db.query(query, [name, type, channelId, serverId, userId], (err, result)=>{
+        if(err){
+          rej(err)
+        } else {
+          res(result);
+        }
+      })
+    })
 }

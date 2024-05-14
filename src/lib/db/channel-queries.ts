@@ -26,3 +26,22 @@ export const createChannel = async (values: {name: string, type: string},serverI
         })
     })
 }
+
+export const deleteChannel = async (channelId: string, serverId: string, userId: string) => {
+    const query = `
+  DELETE channels
+  FROM channels
+  JOIN servers on servers.id = channels.server_id
+  JOIN members on members.server_id = channels.server_id
+  WHERE channels.id = ? AND servers.id = ? AND members.user_id = ? AND members.role IN ('ADMIN', 'MODERATOR') AND channels.name <> 'general'`
+
+  return await new Promise((res, rej) => {
+    db.query(query, [channelId, serverId, userId], (err, result)=>{
+      if(err){
+        rej(err)
+      } else {
+        res(result);
+      }
+    })
+  })
+}

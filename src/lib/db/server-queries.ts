@@ -52,7 +52,7 @@ export const userCreateServer = async (
 
   const memberQuery =
     "INSERT INTO members (user_id, role, server_id) VALUES (?, ?, ?)";
-  const role: MemberRole = "ADMIN";
+  const role: MemberRole = MemberRole.ADMIN;
 
   const member = await new Promise((res, rej) => {
     db.query(memberQuery, [userId, role, serverId], (err, result) => {

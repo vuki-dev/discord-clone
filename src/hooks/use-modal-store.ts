@@ -1,10 +1,11 @@
-import { ChannelInteractionType, ServerType } from '@/lib/types';
+import { ChannelInteractionType, ChannelType, ServerType } from '@/lib/types';
 import {create} from 'zustand'
 
-export type ModalType = "createServer" | "invite" | "editServer" | "members"| "createChannel" | "leaveServer" | "deleteServer";
+export type ModalType = "createServer" | "invite" | "editServer" | "members"| "createChannel" | "leaveServer" | "deleteServer" | "deleteChannel";
 
 interface ModalData {
     server?: ServerType,
+    channel?: ChannelType,
     channelType?: ChannelInteractionType
 }
 

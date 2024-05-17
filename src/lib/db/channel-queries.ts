@@ -1,4 +1,4 @@
-import { ChannelInteractionType } from "../types";
+import { ChannelInteractionType, ChannelType } from "../types";
 import db from "./db";
 
 export const createChannel = async (values: {name: string, type: string},serverId: string, userId: string) => {
@@ -64,4 +64,22 @@ export const editChannel = async (channelId: string, serverId: string, userId: s
         }
       })
     })
+}
+
+export const getChannel = async (channelId:string) => {
+    const query = `
+    SELECT * FROM channels
+    WHERE channels.id = ?`
+
+    const channel: ChannelType = await new Promise((res, rej) => {
+      db.query(query, [channelId], (err, result) => {
+        if (err) {
+          rej(err);
+        } else {
+          res(JSON.parse(JSON.stringify(result[0])));
+        }
+      });
+    });
+
+    return channel;
 }

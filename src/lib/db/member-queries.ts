@@ -1,3 +1,4 @@
+import { MemberType } from "../types";
 import db from "./db";
 
 export const updateMemberRole = async (role:string, serverId: string, userId: string, memberId: string) => {
@@ -34,4 +35,22 @@ export const kickMember = async (memberId: string, serverId: string, userId: str
         }
       });
   }); 
+}
+
+export const getMember = async (serverId:string, userId:string) => {
+  const query = `
+  SELECT * FROM members
+  WHERE members.server_id = ? AND members.user_id = ?`
+
+  const member: MemberType = await new Promise((res, rej) => {
+    db.query(query, [serverId, userId], (err, result) => {
+      if (err) {
+        rej(err);
+      } else {
+        res(JSON.parse(JSON.stringify(result[0])));
+      }
+    });
+  });
+
+  return member;
 }

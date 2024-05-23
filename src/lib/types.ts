@@ -50,3 +50,11 @@ export enum ChannelInteractionType {
   TEXT = "TEXT",
   VIDEO = "VIDEO"
 }
+
+export interface ConversationType {
+  id: string;
+  memberOneId: string;
+  memberTwoId: string;
+  memberOne: UserType;
+  memberTwo: UserType;
+}

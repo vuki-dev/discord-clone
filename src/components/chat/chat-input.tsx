@@ -5,6 +5,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import qs from "query-string"
+import Cookies from "js-cookie";
 
 import {
     Form,
@@ -43,7 +44,11 @@ const ChatInput = ({ apiUrl, name, query, type }: ChatInputProps) => {
             query
         })
 
-        await axios.post(url, values)
+        await axios.post(url, values, {
+          headers: {
+            "Authorization": `Bearer ${Cookies.get("token")}`
+          }
+        })
     } catch (err) {
         console.log(err);
     }

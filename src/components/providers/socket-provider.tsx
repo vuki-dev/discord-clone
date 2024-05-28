@@ -22,14 +22,15 @@ export const useSocket = () => {
     return useContext(SocketContext);
 }
 
+const SocketServer = "http://localhost:4000";
+
 export const SocketProvider = ({children}: {children: React.ReactNode}) => {
     const [socket, setSocket] = useState(null);
     const [isConnected, setIsConnected] = useState(false);
 
     useEffect(() => {
-        const socketInstance = new (ClientIO as any)(process.env.NEXT_PUBLIC_SITE_URL!, {
-          path: "/api/socket/io",
-          addTrailingSlash: false,
+        const socketInstance = new (ClientIO as any)(SocketServer, {
+          path: "/socket.io",
         });
       
         socketInstance.on("connect", () => {

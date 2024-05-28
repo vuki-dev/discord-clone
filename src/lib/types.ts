@@ -2,6 +2,8 @@ import { Server as NetServer, Socket } from "net";
 import { NextApiResponse } from "next";
 import {Server as SocketIOServer } from "socket.io";
 
+import { NextResponse } from "next/server";
+
 export interface UserType {
   id: string;
   name: string;

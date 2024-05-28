@@ -27,8 +27,6 @@ const ChannelIdPage = async ({params}: ChannelIdPageProps) =>{
         redirect('/');
     }
 
-    console.log(`${process.env.API_URL}/api/messages/`)
-
     return (
         <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
             <ChatHeader type="channel" name={channel.name} serverId={channel.server_id} />

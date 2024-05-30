@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 import Cookies from "js-cookie";
+import { useModal } from "@/hooks/use-modal-store";
 
 interface ChatItemProps {
   id: string;
@@ -55,7 +56,7 @@ const ChatItem = ({
   socketUrl,
 }: ChatItemProps) => {
   const [isEditting, setIsEditting] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const { onOpen } = useModal();
 
   useEffect(() => {
     const handleKeyDown = (event: any) => {
@@ -86,6 +87,9 @@ const ChatItem = ({
         })
 
         await axios.patch(url, values, {headers: {"Authorization":`Bearer ${Cookies.get("token")}`}});
+
+        form.reset();
+        setIsEditting(false);
     } catch (err) {
         console.log(err)
     }
@@ -231,6 +235,10 @@ const ChatItem = ({
           )}
           <ActionTooltip label="Delete">
             <Trash
+              onClick={() => onOpen("deleteMessage", {
+                apiUrl: `${socketUrl}${id}`,
+                query: socketQuery
+              })}
               className="cursor-pointer ml-auto h-4 w-4 text-zinc-500
                             hover::text-zinc-600 dark:hover:text-zinc-300 transition"
             />

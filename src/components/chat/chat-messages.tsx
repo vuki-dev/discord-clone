@@ -1,10 +1,14 @@
 "use client"
 
-import { MemberType } from "@/lib/types";
+import { MemberType, MessageType } from "@/lib/types";
 import ChatWelcome from "./chat-welcome";
 import { useChatQuery } from "@/hooks/use-chat-query";
 import { Loader2, ServerCrash } from "lucide-react";
 import { Fragment } from "react";
+import ChatItem from "./chat-item";
+import { format } from "date-fns";
+
+const DATE_FORMAT = "d MMM yyyy, HH:mm"
 
 interface ChatMessagesProps {
     name: string;
@@ -37,8 +41,6 @@ const ChatMessages = ({
         paramKey,
         paramValue
     })
-
-    console.log(data);
 
     if(status === "pending") {
         return (
@@ -74,10 +76,19 @@ const ChatMessages = ({
                 {
                     data?.pages?.map((group, i) => (
                         <Fragment key={i}>
-                            {group.items.map((message: any) => {
-                                return <div key={message.id}>
-                                    {message.content}
-                                </div>
+                            {group.items.map((message: MessageType) => {
+                               return <ChatItem key={message.id}
+                                member={message.member}
+                                currentMember={member}
+                                id={message.id}
+                                content={message.content}
+                                fileUrl={message.file_url}
+                                deleted={message.deleted}
+                                timestamp={format(new Date(message.created_at), DATE_FORMAT)}
+                                isUpdated={message.updated_at !== message.created_at}
+                                socketUrl={socketUrl}
+                                socketQuery={socketQuery}
+                                />
                             })}
                         </Fragment>
                     ))

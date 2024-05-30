@@ -72,3 +72,14 @@ export type NextApiResponseServerIo = NextApiResponse & {
     }
   }
 }
+
+export interface MessageType {
+  id: string,
+  content: string,
+  file_url: string,
+  member_id: string,
+  deleted: boolean,
+  created_at: Date,
+  updated_at: Date,
+  member: MemberType
+}

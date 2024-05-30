@@ -131,14 +131,14 @@ const roleIconMap = {
                           </DropdownMenuSubTrigger>
                           <DropdownMenuPortal>
                             <DropdownMenuSubContent>
-                              <DropdownMenuItem onClick={()=>{onRoleChange(member.id, "GUEST")}}>
+                              <DropdownMenuItem onClick={()=>{onRoleChange(member.id, MemberRole.GUEST)}}>
                                 <Shield className="h-4 w-4 mr-2" />
                                 GUEST
                                 {
                                   member.role === "GUEST" && (<Check className="h-4 w-4 ml-auto" />)
                                 }
                               </DropdownMenuItem>
-                              <DropdownMenuItem onClick={()=>{onRoleChange(member.id, "MODERATOR")}}>
+                              <DropdownMenuItem onClick={()=>{onRoleChange(member.id, MemberRole.MODERATOR)}}>
                                 <ShieldCheck className="h-4 w-4 mr-2" />
                                 MODERATOR
                                 {

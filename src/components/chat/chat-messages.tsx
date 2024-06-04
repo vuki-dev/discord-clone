@@ -107,7 +107,7 @@ const ChatMessages = ({
                 {
                     data?.pages?.map((group, i) => (
                         <Fragment key={i}>
-                            {group.items.map((message: MessageType) => {
+                            {group.items?.map((message: MessageType) => {
                                return <ChatItem key={message.id}
                                 member={message.member}
                                 currentMember={member}

@@ -52,7 +52,7 @@ const ChatInput = ({ apiUrl, name, query, type }: ChatInputProps) => {
 
         await axios.post(url, values, {
           headers: {
-            "Authorization": `Bearer ${Cookies.get("token")}`
+            "Authorization": `Bearer ${Cookies.get("token")}`,
           }
         })
 

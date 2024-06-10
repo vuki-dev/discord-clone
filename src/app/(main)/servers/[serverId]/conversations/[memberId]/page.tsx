@@ -44,8 +44,8 @@ const MemberIdPage = async ({params}: MemberIdPageProps) => {
               name={otherMember.name}
               chatId={conversation.id}
               type="conversation"
-              apiUrl={`${process.env.API_URL}/api/messages`}
-              socketUrl={`${process.env.API_URL}/api/messages`}
+              apiUrl={`${process.env.API_URL}/api/direct-messages/`}
+              socketUrl={`${process.env.API_URL}/api/direct-messages/`}
               socketQuery={{
                 conversationId: conversation.id
               }}
@@ -55,7 +55,7 @@ const MemberIdPage = async ({params}: MemberIdPageProps) => {
             <ChatInput
               name={otherMember.name}
               type="conversation"
-              apiUrl={`${process.env.API_URL}/api/messsages/send-message`}
+              apiUrl={`${process.env.API_URL}/api/direct-messages/send-message`}
               query={{
                 conversationId: conversation.id
               }}

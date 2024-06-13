@@ -11,7 +11,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   let accountDialogue = pathname.includes("login") && (
     <p className="mt-[10px]">
-      Don't have an account?{" "}
+      Don&apos;t have an account?{" "}
       <Link className=" text-indigo-500 hover:underline" href={"/register"}>
         Register now!
       </Link>
